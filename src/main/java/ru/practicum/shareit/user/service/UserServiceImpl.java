@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
@@ -16,11 +15,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-
-        if (userDto == null) {
-            throw new ValidationException("Не достаточно данных для регистрации пользователя");
-        }
-
         return repository.createUser(userDto);
     }
 
@@ -38,12 +32,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsers() {
-        return repository.getUsers();
-    }
-
-    @Override
     public UserDto getUserById(Long userID) {
+        if (userID == null) {
+            throw new ValidationException("ID пользователя должен быть указан");
+        }
+
         return repository.getUserById(userID);
     }
 

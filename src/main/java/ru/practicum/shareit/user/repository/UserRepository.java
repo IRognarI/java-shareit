@@ -31,13 +31,13 @@ public class UserRepository {
         }
 
         User user = MapToUser.mapToUser(userDto);
-        user.toBuilder().id(generatedId());
+        User finalUser = user.toBuilder().id(generatedId()).build();
 
-        log.info("Добавлен пользователь с id: {}\nИмя: {}\nEmail: {}", user.getId(), user.getName(), user.getEmail());
+        log.info("Добавлен пользователь с id: {}\nИмя: {}\nEmail: {}", finalUser.getId(), finalUser.getName(), finalUser.getEmail());
 
-        userMap.put(user.getId(), user);
+        userMap.put(finalUser.getId(), finalUser);
 
-        return UserDto.userToDto(user);
+        return UserDto.userToDto(finalUser);
     }
 
     public UserDto updateUser(Long userId, UserDto userDto) throws UserNotFoundException, EmailDuplicatedException {

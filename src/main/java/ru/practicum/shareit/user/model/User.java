@@ -1,10 +1,11 @@
 package ru.practicum.shareit.user.model;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 /**
  * TODO Sprint add-controllers.
@@ -15,10 +16,12 @@ import lombok.NonNull;
 public class User {
     private final Long id;
 
-    @NonNull
+    @NotNull
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
 
-    @NonNull
+    @NotNull
     @Email(message = "Укажите корректный email адрес")
+    @NotBlank(message = "Email адрес не может быть пустым")
     private String email;
 }

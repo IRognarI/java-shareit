@@ -1,9 +1,10 @@
 package ru.practicum.shareit.item.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 /**
  * TODO Sprint add-controllers.
@@ -14,16 +15,18 @@ import lombok.NonNull;
 public class Item {
     private final Long id;
 
-    @NonNull
+    @NotNull
+    @NotBlank(message = "Название не может быть пустым")
     private String name;
 
-    @NonNull
+    @NotBlank(message = "Описание не может быть пустым")
+    @NotNull
     private String description;
 
-    @NonNull
+    @NotNull
     private Boolean available;
 
-    @NonNull
+    @NotNull
     private final Long owner;
 
     private String request;

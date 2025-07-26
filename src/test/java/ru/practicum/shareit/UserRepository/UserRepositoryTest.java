@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.exception.userException.EmailDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -19,10 +18,6 @@ public class UserRepositoryTest {
     private UserDto testUser3;
     private UserDto testUser4;
     private UserDto testUser5;
-    private ItemDto testItem1;
-    private ItemDto testItem2;
-    private ItemDto testItem3;
-    private ItemDto testItem4;
 
     @BeforeEach
     public void setup() {
