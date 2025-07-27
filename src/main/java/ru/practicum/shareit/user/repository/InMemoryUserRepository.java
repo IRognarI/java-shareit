@@ -16,11 +16,11 @@ import ru.practicum.shareit.user.model.User;
 
 @Slf4j
 @Component
-public class UserRepository {
+public class InMemoryUserRepository {
     private final Map<Long, User> userMap = new TreeMap<>();
 
     public UserDto createUser(UserDto userDto) {
-        log.info("Получено имя: {} и email {}", userDto.getName(), userDto.getEmail());
+        log.info("\tПолучено имя: {} и email {}", userDto.getName(), userDto.getEmail());
 
         boolean userExists = userMap.values()
                 .stream()
@@ -33,7 +33,11 @@ public class UserRepository {
         User user = MapToUser.mapToUser(userDto);
         User finalUser = user.toBuilder().id(generatedId()).build();
 
-        log.info("Добавлен пользователь с id: {}\nИмя: {}\nEmail: {}", finalUser.getId(), finalUser.getName(), finalUser.getEmail());
+        log.info("""
+                \tДобавлен пользователь с id: {}
+                \tИмя: {}
+                \tEmail: {}
+                """, finalUser.getId(), finalUser.getName(), finalUser.getEmail());
 
         userMap.put(finalUser.getId(), finalUser);
 
@@ -41,7 +45,7 @@ public class UserRepository {
     }
 
     public UserDto updateUser(Long userId, UserDto userDto) throws UserNotFoundException, EmailDuplicatedException {
-        log.info("Передано ID пользователя {}\nДанные для обновления:\tЛогин: {}\tEmail: {}",
+        log.info("\tПередано ID пользователя {}\tДанные для обновления:\tЛогин: {}\tEmail: {}",
                 userId, userDto.getName(), userDto.getEmail());
 
         Optional<User> userExists = Optional.ofNullable(userMap.get(userId));
@@ -71,7 +75,7 @@ public class UserRepository {
                 .email(userDto.getEmail() != null ? userDto.getEmail() : userExists.get().getEmail())
                 .build();
 
-        log.info("Обновленный пользователь: ID: {}\tИмя: {}\tEmail: {}", user.getId(), user.getName(), user.getEmail());
+        log.info("\tОбновленный пользователь: ID: {}\tИмя: {}\tEmail: {}", user.getId(), user.getName(), user.getEmail());
 
         return UserDto.userToDto(user);
     }
@@ -85,7 +89,7 @@ public class UserRepository {
     }
 
     public UserDto getUserById(Long userID) {
-        log.info("Получен ID пользователя: {}\nПользователь существует - {}", userID, userMap.containsKey(userID));
+        log.info("\tПолучен ID пользователя: {}\tПользователь существует - {}", userID, userMap.containsKey(userID));
 
         Optional<User> userExists = Optional.ofNullable(userMap.get(userID));
 
@@ -97,8 +101,8 @@ public class UserRepository {
     }
 
     public void removeUserById(Long userId) {
-        log.info("Получен ID пользователя: {}", userId);
-        log.debug("Пользователей до удаления: {}", userMap.size());
+        log.info("\tПолучен ID пользователя: {}", userId);
+        log.debug("\tПользователей до удаления: {}", userMap.size());
 
         Optional<User> user = Optional.ofNullable(userMap.get(userId));
 
@@ -107,7 +111,7 @@ public class UserRepository {
         }
         userMap.remove(user.get().getId());
 
-        log.debug("Пользователей после удаления: {}", userMap.size());
+        log.debug("\tПользователей после удаления: {}", userMap.size());
     }
 
     private Long generatedId() {

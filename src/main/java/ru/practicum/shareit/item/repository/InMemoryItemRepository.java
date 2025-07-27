@@ -16,22 +16,24 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.MapToItem;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.repository.InMemoryUserRepository;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ItemRepository {
+public class InMemoryItemRepository {
     private final Map<Long, Item> itemMap = new TreeMap<>();
-    private final UserRepository userRepository;
+    private final InMemoryUserRepository userRepository;
 
     public ItemDto addItem(Long userId, ItemDto itemDto) {
         log.info("""
-                        Получили id пользователя: {}
-                        Пользователь существует: {}
-                        Параметры вещи:\tНазвание {}\tОписание {}\
-                        \tСтатус бронирования {}\t
-                        ID владельца вещи {}""", userId, userExists(userId), itemDto.getName(), itemDto.getDescription(),
+                        \tПолучили id пользователя: {}
+                        \tПользователь существует: {}
+                        \tПараметры вещи:\tНазвание {}\tОписание {}
+                        \tСтатус бронирования {}
+                        \tID владельца вещи {}
+                        """,
+                userId, userExists(userId), itemDto.getName(), itemDto.getDescription(),
                 itemDto.getAvailable(), userId);
 
         if (!userExists(userId)) {
@@ -47,14 +49,20 @@ public class ItemRepository {
 
         itemMap.put(finalItem.getId(), finalItem);
 
-        log.info("Вернули пользователя {}", finalItem);
+        log.info("\tВернули пользователя {}", finalItem);
 
         return ItemDto.itemToDto(finalItem);
     }
 
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
-        log.info("Получили id пользователя {}\tID вещи {}\tДанные для обновления:\tНазвание {}\tОписание {}\tСтатус {}",
-                userId, itemId, itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable());
+        log.info("""
+                \tПолучили id пользователя {}
+                \tID вещи {}
+                \tДанные для обновления:
+                \tНазвание {}
+                \tОписание {}
+                \tСтатус {}
+                """, userId, itemId, itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable());
 
         if (!userExists(userId)) {
             throw new UserNotFoundException("Пользователь с id { " + userId + " } - не существует");
@@ -82,13 +90,13 @@ public class ItemRepository {
                         itemDto.getAvailable() : itemExists.get().getAvailable())
                 .build();
 
-        log.info("Вернули пользователя {}", update);
+        log.info("\tВернули пользователя {}", update);
 
         return ItemDto.itemToDto(update);
     }
 
     public ItemDto getItemById(Long userId, Long itemId) {
-        log.info("Получили ID вещи {}", itemId);
+        log.info("\tПолучили ID пользователя {} и вещи {}", userId ,itemId);
 
         if (!userExists(userId)) {
             throw new UserNotFoundException("Пользователь с id { " + userId + " } - не существует");
@@ -100,14 +108,14 @@ public class ItemRepository {
             throw new ItemNotFoundException("Вещь с id { " + itemId + " } - не добавлена");
         }
 
-        log.info("Вернули {}", item.get());
+        log.info("\tВернули {}", item.get());
 
         return ItemDto.itemToDto(item.get());
     }
 
     public List<ItemDto> getUserItem(Long userId) {
-        log.info("Получили ID пользователя {}", userId);
-        log.debug("Пользователь существует: {}", userExists(userId));
+        log.info("\tПолучили ID пользователя {}", userId);
+        log.debug("\tПользователь существует: {}", userExists(userId));
 
         if (!userExists(userId)) {
             throw new UserNotFoundException("Пользователь с id { " + userId + "} - не найден");
@@ -121,7 +129,7 @@ public class ItemRepository {
     }
 
     public List<ItemDto> searchItem(Long userId, String text) {
-        log.info("Получили ID пользователя {} и текст для поиска {}", userId, text);
+        log.info("\tПолучили ID пользователя {} и текст для поиска {}", userId, text);
 
         if (!userExists(userId)) {
             throw new UserNotFoundException("Осуществлять поиск могут только авторизированные пользователи");

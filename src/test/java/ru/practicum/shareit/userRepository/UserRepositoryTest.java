@@ -8,11 +8,11 @@ import ru.practicum.shareit.exception.userException.EmailDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.repository.InMemoryUserRepository;
 
 @RequiredArgsConstructor
 public class UserRepositoryTest {
-    private UserRepository repository;
+    private InMemoryUserRepository repository;
     private UserDto testUser1;
     private UserDto testUser2;
     private UserDto testUser3;
@@ -21,7 +21,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     public void setup() {
-        repository = new UserRepository();
+        repository = new InMemoryUserRepository();
 
         testUser1 = UserDto.builder()
                 .name("Aleks")

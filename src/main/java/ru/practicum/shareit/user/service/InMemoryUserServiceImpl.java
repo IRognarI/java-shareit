@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.repository.InMemoryUserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class InMemoryUserServiceImpl implements UserService {
 
-    private final UserRepository repository;
+    private final InMemoryUserRepository repository;
 
     @Override
     public UserDto createUser(UserDto userDto) {

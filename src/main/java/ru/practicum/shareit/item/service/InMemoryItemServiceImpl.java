@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.repository.InMemoryItemRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ItemServiceImpl implements ItemService {
-    private final ItemRepository repository;
+public class InMemoryItemServiceImpl implements ItemService {
+    private final InMemoryItemRepository repository;
 
     @Override
     public ItemDto addItem(Long userId, ItemDto itemDto) {
