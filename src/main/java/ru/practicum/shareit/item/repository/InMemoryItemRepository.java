@@ -96,7 +96,7 @@ public class InMemoryItemRepository {
     }
 
     public ItemDto getItemById(Long userId, Long itemId) {
-        log.info("\tПолучили ID пользователя {} и вещи {}", userId ,itemId);
+        log.info("\tПолучили ID пользователя {} и вещи {}", userId, itemId);
 
         if (!userExists(userId)) {
             throw new UserNotFoundException("Пользователь с id { " + userId + " } - не существует");
