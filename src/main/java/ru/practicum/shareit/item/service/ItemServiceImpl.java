@@ -18,11 +18,6 @@ public class ItemServiceImpl implements ItemService {
         if (userId == null || userId <= 0) {
             throw new ValidationException("ID пользователя не может быть " + userId);
         }
-
-        if (itemDto == null) {
-            throw new ValidationException("Не достаточно данных для добавления вещи");
-        }
-
         return repository.addItem(userId, itemDto);
     }
 
@@ -44,12 +39,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItemById(Long itemId) {
+    public ItemDto getItemById(Long userId, Long itemId) {
         if (itemId == null || itemId <= 0) {
             throw new ValidationException("ID вещи не может быть " + itemId);
         }
 
-        return repository.getItemById(itemId);
+        return repository.getItemById(userId, itemId);
     }
 
     @Override
@@ -62,11 +57,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItem(String text) {
-        if (text == null || text.isEmpty()) {
-            throw new ValidationException("Укажите больше данных для поиска");
-        }
-
-        return repository.searchItem(text);
+    public List<ItemDto> searchItem(Long userId, String text) {
+        return repository.searchItem(userId, text);
     }
 }

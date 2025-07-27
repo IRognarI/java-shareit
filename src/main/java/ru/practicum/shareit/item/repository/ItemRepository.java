@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ItemRepository {
         log.info("""
                         Получили id пользователя: {}
                         Пользователь существует: {}
-                        Параметры вещи:\tназвание {}\tописание {}\
+                        Параметры вещи:\tНазвание {}\tОписание {}\
                         \tСтатус бронирования {}\t
                         ID владельца вещи {}""", userId, userExists(userId), itemDto.getName(), itemDto.getDescription(),
                 itemDto.getAvailable(), userId);
@@ -37,14 +38,18 @@ public class ItemRepository {
             throw new UserNotFoundException("Пользователь с id { " + userId + " } - не существует");
         }
 
+        if (!valuesNotNull(itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable())) {
+            throw new ValidationException("Не достаточно данных для добавления вещи");
+        }
+
         Item item = MapToItem.mapToItem(itemDto);
-        item.toBuilder().id(generatedId()).owner(userId);
+        Item finalItem = item.toBuilder().id(generatedId()).owner(userId).build();
 
-        itemMap.put(item.getId(), item);
+        itemMap.put(finalItem.getId(), finalItem);
 
-        log.info("Вернули пользователя {}", item);
+        log.info("Вернули пользователя {}", finalItem);
 
-        return ItemDto.itemToDto(item);
+        return ItemDto.itemToDto(finalItem);
     }
 
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
@@ -82,8 +87,12 @@ public class ItemRepository {
         return ItemDto.itemToDto(update);
     }
 
-    public ItemDto getItemById(Long itemId) {
+    public ItemDto getItemById(Long userId, Long itemId) {
         log.info("Получили ID вещи {}", itemId);
+
+        if (!userExists(userId)) {
+            throw new UserNotFoundException("Пользователь с id { " + userId + " } - не существует");
+        }
 
         Optional<Item> item = Optional.ofNullable(itemMap.get(itemId));
 
@@ -100,7 +109,7 @@ public class ItemRepository {
         log.info("Получили ID пользователя {}", userId);
         log.debug("Пользователь существует: {}", userExists(userId));
 
-        if (userExists(userId)) {
+        if (!userExists(userId)) {
             throw new UserNotFoundException("Пользователь с id { " + userId + "} - не найден");
         }
 
@@ -111,8 +120,16 @@ public class ItemRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<ItemDto> searchItem(String text) {
-        log.info("Получили запрос {}", text);
+    public List<ItemDto> searchItem(Long userId, String text) {
+        log.info("Получили ID пользователя {} и текст для поиска {}", userId, text);
+
+        if (!userExists(userId)) {
+            throw new UserNotFoundException("Осуществлять поиск могут только авторизированные пользователи");
+        }
+
+        if (text == null || text.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         String textToLoweCase = text.toLowerCase();
 
@@ -124,7 +141,9 @@ public class ItemRepository {
                     String desc = item.getDescription().toLowerCase();
 
                     return name.contains(textToLoweCase) || desc.contains(textToLoweCase);
+
                 })
+                .filter(item -> item.getAvailable() == true)
                 .map(ItemDto::itemToDto)
                 .collect(Collectors.toList());
     }
@@ -132,6 +151,10 @@ public class ItemRepository {
     private boolean userExists(Long userId) {
         UserDto user = userRepository.getUserById(userId);
         return user != null;
+    }
+
+    private boolean valuesNotNull(String name, String desc, Boolean available) {
+        return (name != null && !name.isEmpty()) && (desc != null && !desc.isEmpty()) && available != null;
     }
 
     private Long generatedId() {

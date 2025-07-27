@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.error.ErrorResponse;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.exception.userException.EmailDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserDuplicatedException;
+import ru.practicum.shareit.exception.userException.UserNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,6 +24,15 @@ public class ErrorHandler {
         ErrorResponse error = new ErrorResponse("Ошибка при регистрации пользователя", e.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> userFoundException(final UserNotFoundException e) {
+        log.debug(e.getMessage());
+
+        ErrorResponse error = new ErrorResponse("Ошибка поиска пользователя", e.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
@@ -49,5 +60,14 @@ public class ErrorHandler {
         ErrorResponse error = new ErrorResponse("Проблема с email адресом", e.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> searchItemFailed(final ItemNotFoundException e) {
+        log.debug(e.getMessage());
+
+        ErrorResponse error = new ErrorResponse("Ошибка поиска вещи", e.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
