@@ -11,13 +11,22 @@ import ru.practicum.shareit.exception.userException.EmailDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserDuplicatedException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.MapToUser;
+import ru.practicum.shareit.user.mapper.UserMappers;
 import ru.practicum.shareit.user.model.User;
+
+/**
+ * В данном классе реализованы методы объявленные в интерфейсе UserService
+ */
 
 @Slf4j
 @Component
 public class InMemoryUserRepository {
     private final Map<Long, User> userMap = new TreeMap<>();
+
+    /**
+     * Создание/Регистрация пользователя
+     * На выходе получаем UserDto
+     */
 
     public UserDto createUser(UserDto userDto) {
         log.info("\tПолучено имя: {} и email {}", userDto.getName(), userDto.getEmail());
@@ -30,7 +39,7 @@ public class InMemoryUserRepository {
             throw new UserDuplicatedException("Email { " + userDto.getEmail() + " } - занят");
         }
 
-        User user = MapToUser.mapToUser(userDto);
+        User user = UserMappers.mapToUser(userDto);
         User finalUser = user.toBuilder().id(generatedId()).build();
 
         log.info("""
@@ -41,8 +50,13 @@ public class InMemoryUserRepository {
 
         userMap.put(finalUser.getId(), finalUser);
 
-        return UserDto.userToDto(finalUser);
+        return UserMappers.userToDto(finalUser);
     }
+
+    /**
+     * Обновление пользователя. На выходе также получаем UserDto
+     * Метод учитывает, чтобы email был уникален
+     */
 
     public UserDto updateUser(Long userId, UserDto userDto) throws UserNotFoundException, EmailDuplicatedException {
         log.info("\tПередано ID пользователя {}\tДанные для обновления:\tЛогин: {}\tEmail: {}",
@@ -77,16 +91,24 @@ public class InMemoryUserRepository {
 
         log.info("\tОбновленный пользователь: ID: {}\tИмя: {}\tEmail: {}", user.getId(), user.getName(), user.getEmail());
 
-        return UserDto.userToDto(user);
+        return UserMappers.userToDto(user);
     }
+
+    /**
+     * Получение всех пользователей
+     */
 
     public List<UserDto> getUsers() {
 
         return userMap.values()
                 .stream()
-                .map(UserDto::userToDto)
+                .map(UserMappers::userToDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Получение пользователя по ID
+     */
 
     public UserDto getUserById(Long userID) {
         log.info("\tПолучен ID пользователя: {}\tПользователь существует - {}", userID, userMap.containsKey(userID));
@@ -97,8 +119,12 @@ public class InMemoryUserRepository {
             throw new UserNotFoundException("Пользователь с id { " + userID + " } - не найден");
         }
 
-        return UserDto.userToDto(userExists.get());
+        return UserMappers.userToDto(userExists.get());
     }
+
+    /**
+     * Удаление пользователя по ID
+     */
 
     public void removeUserById(Long userId) {
         log.info("\tПолучен ID пользователя: {}", userId);
@@ -113,6 +139,10 @@ public class InMemoryUserRepository {
 
         log.debug("\tПользователей после удаления: {}", userMap.size());
     }
+
+    /**
+     * Метод - генератор уникального ID в коллекции userMap
+     */
 
     private Long generatedId() {
 

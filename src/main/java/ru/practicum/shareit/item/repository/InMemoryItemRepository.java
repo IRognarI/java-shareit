@@ -13,10 +13,14 @@ import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.mapper.MapToItem;
+import ru.practicum.shareit.item.mapper.ItemMappers;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.InMemoryUserRepository;
+
+/**
+ * Основной класс в котором реализованы методы интерфейса ItemService
+ */
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +28,10 @@ import ru.practicum.shareit.user.repository.InMemoryUserRepository;
 public class InMemoryItemRepository {
     private final Map<Long, Item> itemMap = new TreeMap<>();
     private final InMemoryUserRepository userRepository;
+
+    /**
+     * Добавление вещи. На выходе метод возвращает ItemDto
+     */
 
     public ItemDto addItem(Long userId, ItemDto itemDto) {
         log.info("""
@@ -44,15 +52,19 @@ public class InMemoryItemRepository {
             throw new ValidationException("Не достаточно данных для добавления вещи");
         }
 
-        Item item = MapToItem.mapToItem(itemDto);
+        Item item = ItemMappers.mapToItem(itemDto);
         Item finalItem = item.toBuilder().id(generatedId()).owner(userId).build();
 
         itemMap.put(finalItem.getId(), finalItem);
 
         log.info("\tВернули пользователя {}", finalItem);
 
-        return ItemDto.itemToDto(finalItem);
+        return ItemMappers.itemToDto(finalItem);
     }
+
+    /**
+     * Обновление вещи. Метод учитывает, что редактировать вещь может только владелец вещи
+     */
 
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
         log.info("""
@@ -92,8 +104,12 @@ public class InMemoryItemRepository {
 
         log.info("\tВернули пользователя {}", update);
 
-        return ItemDto.itemToDto(update);
+        return ItemMappers.itemToDto(update);
     }
+
+    /**
+     * Метод получения вещи по ее ID
+     */
 
     public ItemDto getItemById(Long userId, Long itemId) {
         log.info("\tПолучили ID пользователя {} и вещи {}", userId, itemId);
@@ -110,8 +126,12 @@ public class InMemoryItemRepository {
 
         log.info("\tВернули {}", item.get());
 
-        return ItemDto.itemToDto(item.get());
+        return ItemMappers.itemToDto(item.get());
     }
+
+    /**
+     * Метод для получения пользователем всех его вещей.
+     */
 
     public List<ItemDto> getUserItem(Long userId) {
         log.info("\tПолучили ID пользователя {}", userId);
@@ -124,9 +144,14 @@ public class InMemoryItemRepository {
         return itemMap.values()
                 .stream()
                 .filter(item -> item.getOwner().equals(userId))
-                .map(ItemDto::itemToDto)
+                .map(ItemMappers::itemToDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Метод для поиска вещи по ключевой фразе. Поиск осуществляется среди названия вещи или ее описания.
+     * Метод учитывает, чтобы на выходе были вещи, которые доступны для бронирования
+     */
 
     public List<ItemDto> searchItem(Long userId, String text) {
         log.info("\tПолучили ID пользователя {} и текст для поиска {}", userId, text);
@@ -152,18 +177,34 @@ public class InMemoryItemRepository {
 
                 })
                 .filter(item -> item.getAvailable() == true)
-                .map(ItemDto::itemToDto)
+                .map(ItemMappers::itemToDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Данный метод проверяет существование пользователя. Помогает исключить дублирование проверки во множестве методов
+     */
 
     private boolean userExists(Long userId) {
         UserDto user = userRepository.getUserById(userId);
         return user != null;
     }
 
+    /**
+     * Метод - валидатор. Проверяет:
+     * - название вещи
+     * - ее описание
+     * - доступность бронирования
+     * Цель проверки - исключить отсутствие значений
+     */
+
     private boolean valuesNotNull(String name, String desc, Boolean available) {
         return (name != null && !name.isEmpty()) && (desc != null && !desc.isEmpty()) && available != null;
     }
+
+    /**
+     * Метод - генератор уникального ID в коллекции itemMap
+     */
 
     private Long generatedId() {
         long id = itemMap.keySet()

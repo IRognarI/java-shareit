@@ -7,6 +7,11 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.repository.InMemoryUserRepository;
 
+/**
+ * Класс имплементирующий интерфейс UserService
+ * Реализация методов находится в классе InMemoryUserRepository
+ */
+
 @Service
 @RequiredArgsConstructor
 public class InMemoryUserServiceImpl implements UserService {

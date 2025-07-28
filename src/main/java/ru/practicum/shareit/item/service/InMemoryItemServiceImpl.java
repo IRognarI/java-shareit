@@ -8,6 +8,11 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.item.repository.InMemoryItemRepository;
 
+/**
+ * Класс имплементирующий интерфейс ItemService
+ * Реализация методов находится в классе InMemoryItemRepository
+ */
+
 @Service
 @RequiredArgsConstructor
 public class InMemoryItemServiceImpl implements ItemService {
