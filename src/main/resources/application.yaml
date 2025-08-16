@@ -25,15 +25,15 @@ spring:
           orm:
             jpa: INFO
             JpaTransactionManager: DEBUG
-          transaction: INFO
-          transaction.interceptor: TRACE
+            transaction: INFO
+            transaction.interceptor: TRACE
+
+  server:
+    port: 8080
 
 ---
-spring:
-  config:
-    activate:
-      on-profile: ci,test
 
+spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:shareit
@@ -49,3 +49,6 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+  profiles:
+    active: test

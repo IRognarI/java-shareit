@@ -86,13 +86,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getItemsBySearchQuery(String text) {
-        if ((text != null) && (!text.isEmpty()) && (!text.isBlank())) {
-            text = text.toLowerCase();
+        if (text != null && !text.isBlank()) {
             return repository.getItemsBySearchQuery(text).stream()
                     .map(mapper::toItemDto)
                     .collect(toList());
-        } else return new ArrayList<>();
+        } else {
+            return new ArrayList<>();
+        }
     }
+
 
     @Override
     public ItemDto update(ItemDto itemDto, Long ownerId, Long itemId) {

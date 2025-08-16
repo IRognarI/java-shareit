@@ -9,6 +9,7 @@ import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,12 +39,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
-        try {
-            return mapper.toUserDto(repository.save(mapper.toUser(userDto)));
-        } catch (DataIntegrityViolationException e) {
-            throw new UserAlreadyExistsException("Пользователь с E-mail=" +
-                    userDto.getEmail() + " уже существует!");
-        }
+        Optional<User> user = repository.getUserByEmail(userDto.getEmail());
+
+        if (user.isPresent()) throw new UserAlreadyExistsException("Пользователь с E-mail=" +
+                userDto.getEmail() + " уже существует!");
+
+        return mapper.toUserDto(repository.save(mapper.toUser(userDto)));
     }
 
     @Override
