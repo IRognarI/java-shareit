@@ -23,6 +23,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация методов интерфейса BookingService
+ * CRUD методы и методы получения сущностей с заданными параметрами
+ *
+ */
+
 
 @Slf4j
 @Service
@@ -60,24 +66,22 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(Long bookingId, Long userId, Boolean approved) {
-        // Проверяем существование пользователя
-        //checker.isExistUser(userId);
 
-        // Находим бронирование или выбрасываем исключение
+
         Booking booking = repository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("Бронирование с ID=" + bookingId + " не найдено!"));
 
-        // Проверяем, что пользователь является владельцем вещи
+
         if (!booking.getItem().getOwner().getId().equals(userId)) {
             throw new UserIsNotOwnerItemException("Подтвердить бронирование может только владелец вещи!");
         }
 
-        // Проверяем текущий статус бронирования
+
         if (!booking.getStatus().equals(Status.WAITING)) {
             throw new ValidationException("Решение по бронированию уже принято!");
         }
 
-        // Устанавливаем новый статус в зависимости от параметра approved
+
         if (approved) {
             booking.setStatus(Status.APPROVED);
             log.info("Владелец с ID={} подтвердил бронирование с ID={}", userId, bookingId);
@@ -86,7 +90,7 @@ public class BookingServiceImpl implements BookingService {
             log.info("Владелец с ID={} отклонил бронирование с ID={}", userId, bookingId);
         }
 
-        // Сохраняем изменения и возвращаем DTO
+
         return mapper.toBookingDto(repository.save(booking));
     }
 

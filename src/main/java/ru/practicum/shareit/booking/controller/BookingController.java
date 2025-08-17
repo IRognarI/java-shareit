@@ -19,6 +19,11 @@ import ru.practicum.shareit.booking.interfaces.BookingService;
 
 import java.util.List;
 
+/**
+ * API
+ *
+ */
+
 @Slf4j
 @RestController
 @RequestMapping(path = "/bookings")

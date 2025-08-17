@@ -10,6 +10,10 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
+/*
+ * DTO объект
+ * */
+
 @Data
 @AllArgsConstructor
 public class ItemDto {

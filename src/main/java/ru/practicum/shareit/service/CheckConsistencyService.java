@@ -15,6 +15,11 @@ import ru.practicum.shareit.user.service.UserServiceImpl;
 import java.util.List;
 
 
+/**
+ * Проверка на существование сущностей с заданными параметрами
+ *
+ */
+
 @Service
 public class CheckConsistencyService {
     private UserService userService;

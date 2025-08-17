@@ -9,15 +9,19 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
 
+/*
+ * DTO объект вместе с комментариями
+ * */
+
 @Data
 @AllArgsConstructor
 public class CommentDto {
-    private Long id;                // уникальный идентификатор комментария;
+    private Long id;
     @NotEmpty
     @NotBlank
-    private String text;            // содержимое комментария;
+    private String text;
     @JsonIgnore
-    private Item item;              // вещь, к которой относится комментарий;
-    private String authorName;      // имя автора комментария;
-    private LocalDateTime created;  // дата создания комментария.
+    private Item item;
+    private String authorName;
+    private LocalDateTime created;
 }

@@ -28,16 +28,16 @@ import java.util.Objects;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                 // уникальный идентификатор вещи
+    private Long id;
     @NotBlank
-    private String name;             // краткое название
-    private String description;      // развёрнутое описание
-    private Boolean available;       // статус о том, доступна или нет вещь для аренды
+    private String name;
+    private String description;
+    private Boolean available;
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private User owner;              // владелец вещи
-    private Long requestId;          // если вещь была создана по запросу другого пользователя, то в этом
-    // поле хранится ссылка на соответствующий запрос
+    private User owner;
+    private Long requestId;
+
 
     @Override
     public final boolean equals(Object o) {

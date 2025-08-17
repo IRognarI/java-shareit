@@ -5,6 +5,11 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
+/**
+ * Объявлены основные CRUD методы
+ *
+ */
+
 public interface UserService {
     List<UserDto> getUsers();
 

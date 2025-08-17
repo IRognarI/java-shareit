@@ -12,6 +12,10 @@ import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
+/*
+ * Преобразование сущностей в DTO объекты
+ * */
+
 @Component
 public class BookingMapper {
     private UserServiceImpl userService;

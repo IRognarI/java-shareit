@@ -25,10 +25,10 @@ import java.util.Objects;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;        // уникальный идентификатор пользователя
-    private String name;    // имя или логин пользователя
+    private Long id;
+    private String name;
     @Email
-    private String email;   // адрес электронной почты
+    private String email;
 
     @Override
     public final boolean equals(Object o) {

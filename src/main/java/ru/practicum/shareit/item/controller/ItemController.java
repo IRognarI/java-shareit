@@ -20,6 +20,11 @@ import ru.practicum.shareit.item.interfaces.ItemService;
 
 import java.util.List;
 
+/**
+ * API
+ *
+ */
+
 @Slf4j
 @RestController
 @RequestMapping("/items")

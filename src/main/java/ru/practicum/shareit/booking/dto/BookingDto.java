@@ -8,6 +8,11 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO объект
+ *
+ */
+
 @Data
 @AllArgsConstructor
 public class BookingDto {

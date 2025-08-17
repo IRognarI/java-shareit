@@ -16,6 +16,12 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Реализация методов интерфейса UserService
+ * Основные CRUD операции и получение сущностей по их Id
+ *
+ */
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;

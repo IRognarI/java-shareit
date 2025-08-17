@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * DTO объект
+ */
+
 @Data
 @AllArgsConstructor
 public class UserDto {

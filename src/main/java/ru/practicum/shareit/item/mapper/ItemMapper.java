@@ -9,6 +9,11 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.service.CheckConsistencyService;
 
+/**
+ * Преобразование сущностей в DTO объекты
+ *
+ */
+
 @Component
 public class ItemMapper {
 

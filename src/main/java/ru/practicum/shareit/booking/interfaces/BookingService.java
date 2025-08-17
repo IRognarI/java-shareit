@@ -7,6 +7,11 @@ import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
 
+/**
+ * Объявлены CRUD методы и методы получения сущностей с заданными параметрами
+ *
+ */
+
 public interface BookingService {
     BookingDto create(BookingInputDto bookingDto, Long bookerId);
 

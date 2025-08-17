@@ -31,17 +31,17 @@ import java.util.Objects;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                // уникальный идентификатор комментария;
+    private Long id;
     @NotBlank
     @NotEmpty
-    private String text;            // содержимое комментария;
+    private String text;
     @ManyToOne()
     @JoinColumn(name = "item_id", referencedColumnName = "id")
-    private Item item;              // вещь, к которой относится комментарий;
+    private Item item;
     @ManyToOne()
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private User author;            // автор комментария;
-    private LocalDateTime created;  // дата создания комментария.
+    private User author;
+    private LocalDateTime created;
 
     @Override
     public final boolean equals(Object o) {

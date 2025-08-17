@@ -25,6 +25,14 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Реализация методов интерфейса ItemService
+ * Реализованы CRUD методы
+ * А так же получение сущностей с заданными параметрами
+ * Также реализована возможность оставлять комментарии и просматривать
+ *
+ */
+
 @Service
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
@@ -71,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getItemsByOwner(Long ownerId) {
         checker.isExistUser(ownerId);
         return repository.findByOwnerId(ownerId).stream()
-                .map(mapper::toItemExtDto)
+                .map(mapper::toItemDto)
                 .sorted(Comparator.comparing(ItemDto::getId))
                 .collect(toList());
     }

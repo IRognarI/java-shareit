@@ -17,6 +17,11 @@ import ru.practicum.shareit.user.interfaces.UserService;
 
 import java.util.List;
 
+/**
+ * Реализация API
+ *
+ */
+
 @Slf4j
 @RestController
 @RequestMapping(path = "/users")

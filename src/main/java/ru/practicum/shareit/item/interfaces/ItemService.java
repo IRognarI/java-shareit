@@ -6,6 +6,11 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
+/**
+ * Объявлены CRUD методы и получение объектов с заданными параметрами
+ *
+ */
+
 public interface ItemService {
     ItemDto getItemById(Long id, Long userId);
 
