@@ -1,26 +1,27 @@
 package ru.practicum.shareit.item.interfaces;
 
-import java.util.List;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
 
-/**
- * В данном интерфейсе объявлены методы для основных операций с сущностью Item:
- * 1. Добавление
- * 2. Обновление
- * 3. Получение по ID
- * 4. Получение всех вещей пользователя
- * 5. Поиск вещи по ключевым словам.
- */
+import java.util.List;
 
 public interface ItemService {
+    ItemDto getItemById(Long id, Long userId);
 
-    ItemDto addItem(Long userId, ItemDto itemDto);
+    Item findItemById(Long id);
 
-    ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto);
+    ItemDto create(ItemDto itemDto, Long ownerId);
 
-    ItemDto getItemById(Long userId, Long itemId);
+    List<ItemDto> getItemsByOwner(Long ownerId);
 
-    List<ItemDto> getUserItem(Long userId);
+    void delete(Long itemId, Long ownerId);
 
-    List<ItemDto> searchItem(Long userId, String text);
+    List<ItemDto> getItemsBySearchQuery(String text);
+
+    ItemDto update(ItemDto itemDto, Long ownerId, Long itemId);
+
+    CommentDto createComment(CommentDto commentDto, Long itemId, Long userId);
+
+    List<CommentDto> getCommentsByItemId(Long itemId);
 }

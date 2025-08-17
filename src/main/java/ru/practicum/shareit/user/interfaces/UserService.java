@@ -1,21 +1,20 @@
 package ru.practicum.shareit.user.interfaces;
 
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
-/**
- * В данном интерфейсе объявлены основные методы для работы с сущностью User
- * 1. Создание/Регистрация
- * 2. Обновление
- * 3. Получение пользователя по его ID
- * 4. Удаление пользователя по полученному ID
- */
+import java.util.List;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
+    List<UserDto> getUsers();
 
-    UserDto updateUser(Long userId, UserDto userDto);
+    UserDto getUserById(Long id);
 
-    UserDto getUserById(Long userID);
+    UserDto create(UserDto userDto);
 
-    void removeUserById(Long userId);
+    UserDto update(UserDto userDto, Long id);
+
+    void delete(Long userId);
+
+    User findUserById(Long id);
 }

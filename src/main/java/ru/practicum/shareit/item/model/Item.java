@@ -1,17 +1,20 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.Objects;
 
@@ -21,14 +24,20 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "items")
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;        // уникальный идентификатор пользователя
-    private String name;    // имя или логин пользователя
-    @Email
-    private String email;   // адрес электронной почты
+    private Long id;                 // уникальный идентификатор вещи
+    @NotBlank
+    private String name;             // краткое название
+    private String description;      // развёрнутое описание
+    private Boolean available;       // статус о том, доступна или нет вещь для аренды
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;              // владелец вещи
+    private Long requestId;          // если вещь была создана по запросу другого пользователя, то в этом
+    // поле хранится ссылка на соответствующий запрос
 
     @Override
     public final boolean equals(Object o) {
@@ -37,8 +46,8 @@ public class User {
         Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        Item item = (Item) o;
+        return getId() != null && Objects.equals(getId(), item.getId());
     }
 
     @Override

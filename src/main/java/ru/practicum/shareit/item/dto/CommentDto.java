@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
 
