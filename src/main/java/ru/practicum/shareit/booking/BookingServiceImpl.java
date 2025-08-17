@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInputDto;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.exception.BookingNotFoundException;
+import ru.practicum.shareit.exception.UserIsNotOwnerItemException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.service.CheckConsistencyService;
@@ -54,40 +55,33 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(Long bookingId, Long userId, Boolean approved) {
-        checker.isExistUser(userId);
+        // Проверяем существование пользователя
+        //checker.isExistUser(userId);
+
+        // Находим бронирование или выбрасываем исключение
         Booking booking = repository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("Бронирование с ID=" + bookingId + " не найдено!"));
-        if (booking.getEnd().isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Время бронирования уже истекло!");
+
+        // Проверяем, что пользователь является владельцем вещи
+        if (!booking.getItem().getOwner().getId().equals(userId)) {
+            throw new UserIsNotOwnerItemException("Подтвердить бронирование может только владелец вещи!");
         }
 
-        if (booking.getBooker().getId().equals(userId)) {
-            if (!approved) {
-                booking.setStatus(Status.CANCELED);
-                log.info("Пользователь с ID={} отменил бронирование с ID={}", userId, bookingId);
-            } else {
-                throw new UserNotFoundException("Подтвердить бронирование может только владелец вещи!");
-            }
-        } else if ((checker.isItemOwner(booking.getItem().getId(), userId)) &&
-                (!booking.getStatus().equals(Status.CANCELED))) {
-            if (!booking.getStatus().equals(Status.WAITING)) {
-                throw new ValidationException("Решение по бронированию уже принято!");
-            }
-            if (approved) {
-                booking.setStatus(Status.APPROVED);
-                log.info("Пользователь с ID={} подтвердил бронирование с ID={}", userId, bookingId);
-            } else {
-                booking.setStatus(Status.REJECTED);
-                log.info("Пользователь с ID={} отклонил бронирование с ID={}", userId, bookingId);
-            }
+        // Проверяем текущий статус бронирования
+        if (!booking.getStatus().equals(Status.WAITING)) {
+            throw new ValidationException("Решение по бронированию уже принято!");
+        }
+
+        // Устанавливаем новый статус в зависимости от параметра approved
+        if (approved) {
+            booking.setStatus(Status.APPROVED);
+            log.info("Владелец с ID={} подтвердил бронирование с ID={}", userId, bookingId);
         } else {
-            if (booking.getStatus().equals(Status.CANCELED)) {
-                throw new ValidationException("Бронирование было отменено!");
-            } else {
-                throw new ValidationException("Подтвердить бронирование может только владелец вещи!");
-            }
+            booking.setStatus(Status.REJECTED);
+            log.info("Владелец с ID={} отклонил бронирование с ID={}", userId, bookingId);
         }
 
+        // Сохраняем изменения и возвращаем DTO
         return mapper.toBookingDto(repository.save(booking));
     }
 
