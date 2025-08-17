@@ -1,21 +1,29 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.user.User;
 
-/**
- * TODO Sprint add-controllers.
- */
+import java.util.List;
+
 @Data
-@Builder(toBuilder = true)
-@Setter(AccessLevel.NONE)
+@AllArgsConstructor
 public class ItemDto {
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String description;
+    @NotNull
     private Boolean available;
-    private Long owner;
-    private String request;
+    @JsonIgnore
+    private User owner;
+    private Long requestId;
+    private BookingShortDto lastBooking;
+    private BookingShortDto nextBooking;
+    private List<CommentDto> comments;
 }
