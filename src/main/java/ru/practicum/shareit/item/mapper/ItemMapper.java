@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemMapper {
 
-   
+
     public static ItemDto toItemDto(Item item, List<CommentDto> comments) {
         return new ItemDto(
                 item.getId(),
@@ -26,7 +26,7 @@ public class ItemMapper {
         );
     }
 
-   
+
     public static ItemDto toItemExtDto(Item item, BookingShortDto lastBooking,
                                        BookingShortDto nextBooking, List<CommentDto> comments) {
         return new ItemDto(
@@ -42,7 +42,7 @@ public class ItemMapper {
         );
     }
 
-   
+
     public static Item toItem(ItemDto itemDto, User owner) {
         return new Item(
                 itemDto.getId(),

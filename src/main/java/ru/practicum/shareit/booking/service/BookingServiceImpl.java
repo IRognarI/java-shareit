@@ -74,7 +74,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = BookingMapper.toBooking(bookingInputDto, item, booker);
         Booking savedBooking = repository.save(booking);
 
-       
+
         ItemDto itemDto = itemService.getItemById(item.getId(), bookerId);
         UserDto bookerDto = userMapper.toUserDto(booker);
 
@@ -105,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
 
         Booking updatedBooking = repository.save(booking);
 
-       
+
         ItemDto itemDto = itemService.getItemById(updatedBooking.getItem().getId(), userId);
         UserDto bookerDto = userMapper.toUserDto(updatedBooking.getBooker());
 
@@ -120,7 +120,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new BookingNotFoundException("Бронирование с ID=" + bookingId + " не найдено!"));
 
         if (booking.getBooker().getId().equals(userId) || checker.isItemOwner(booking.getItem().getId(), userId)) {
-           
+
             ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
             UserDto bookerDto = userMapper.toUserDto(booking.getBooker());
 
@@ -162,7 +162,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new ValidationException("Unknown state: " + state);
         }
 
-       
+
         return bookings.stream()
                 .map(booking -> {
                     ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
@@ -204,7 +204,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new ValidationException("Unknown state: " + state);
         }
 
-       
+
         return bookings.stream()
                 .map(booking -> {
                     ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
