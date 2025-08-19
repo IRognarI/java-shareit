@@ -18,7 +18,8 @@ import ru.practicum.shareit.user.interfaces.UserService;
 import java.util.List;
 
 /**
- * Реализация API
+ * Контроллер в системе ShareIt.
+ * Выполняет CRUD операции
  *
  */
 

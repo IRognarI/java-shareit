@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemMapper {
 
-    // Метод для базового преобразования (без бронирований)
+   
     public static ItemDto toItemDto(Item item, List<CommentDto> comments) {
         return new ItemDto(
                 item.getId(),
@@ -20,13 +20,13 @@ public class ItemMapper {
                 item.getAvailable(),
                 item.getOwner(),
                 item.getRequestId(),
-                null, // lastBooking - null по умолчанию
-                null, // nextBooking - null по умолчанию
-                comments // Используем переданный список комментариев
+                null,
+                null,
+                comments
         );
     }
 
-    // Метод для преобразования с данными о бронированиях (для владельца)
+   
     public static ItemDto toItemExtDto(Item item, BookingShortDto lastBooking,
                                        BookingShortDto nextBooking, List<CommentDto> comments) {
         return new ItemDto(
@@ -36,20 +36,20 @@ public class ItemMapper {
                 item.getAvailable(),
                 item.getOwner(),
                 item.getRequestId(),
-                lastBooking, // Используем переданное последнее бронирование
-                nextBooking, // Используем переданное следующее бронирование
-                comments // Используем переданный список комментариев
+                lastBooking,
+                nextBooking,
+                comments
         );
     }
 
-    // Метод для преобразования DTO в Entity. Принимает готовую сущность User.
+   
     public static Item toItem(ItemDto itemDto, User owner) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
-                owner, // Используем переданного владельца
+                owner,
                 itemDto.getRequestId()
         );
     }
@@ -59,7 +59,7 @@ public class ItemMapper {
                 comment.getId(),
                 comment.getText(),
                 comment.getItem(),
-                comment.getAuthor().getName(), // Берем имя напрямую из сущности
+                comment.getAuthor().getName(),
                 comment.getCreated()
         );
     }

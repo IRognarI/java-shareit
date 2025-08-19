@@ -60,12 +60,12 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> comments = getCommentsByItemId(id);
 
         if (userId.equals(item.getOwner().getId())) {
-            // Для владельца - получаем данные о бронированиях
+           
             BookingShortDto lastBooking = bookingService.getLastBooking(id);
             BookingShortDto nextBooking = bookingService.getNextBooking(id);
             return ItemMapper.toItemExtDto(item, lastBooking, nextBooking, comments);
         } else {
-            // Для остальных - только базовую информацию
+           
             return ItemMapper.toItemDto(item, comments);
         }
     }
@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemMapper.toItem(itemDto, owner);
         Item savedItem = repository.save(item);
 
-        // Для новой вещи комментариев еще нет
+       
         return ItemMapper.toItemDto(savedItem, new ArrayList<>());
     }
 

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * DTO объект
+ * DTO объект передающейся "наружу"
  */
 
 @Data
