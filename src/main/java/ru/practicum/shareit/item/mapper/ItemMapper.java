@@ -1,73 +1,66 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.service.CheckConsistencyService;
+import ru.practicum.shareit.user.model.User;
 
-/**
- * Преобразование сущностей в DTO объекты
- *
- */
+import java.util.List;
 
-@Component
 public class ItemMapper {
 
-    private CheckConsistencyService checker;
-
-    @Autowired
-    @Lazy
-    public ItemMapper(CheckConsistencyService checkConsistencyService) {
-        this.checker = checkConsistencyService;
-    }
-
-    public ItemDto toItemDto(Item item) {
+    // Метод для базового преобразования (без бронирований)
+    public static ItemDto toItemDto(Item item, List<CommentDto> comments) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner(),
-                item.getRequestId() != null ? item.getRequestId() : null,
-                null,
-                null,
-                checker.getCommentsByItemId(item.getId()));
+                item.getRequestId(),
+                null, // lastBooking - null по умолчанию
+                null, // nextBooking - null по умолчанию
+                comments // Используем переданный список комментариев
+        );
     }
 
-    public ItemDto toItemExtDto(Item item) {
+    // Метод для преобразования с данными о бронированиях (для владельца)
+    public static ItemDto toItemExtDto(Item item, BookingShortDto lastBooking,
+                                       BookingShortDto nextBooking, List<CommentDto> comments) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner(),
-                item.getRequestId() != null ? item.getRequestId() : null,
-                checker.getLastBooking(item.getId()),
-                checker.getNextBooking(item.getId()),
-                checker.getCommentsByItemId(item.getId()));
+                item.getRequestId(),
+                lastBooking, // Используем переданное последнее бронирование
+                nextBooking, // Используем переданное следующее бронирование
+                comments // Используем переданный список комментариев
+        );
     }
 
-    public Item toItem(ItemDto itemDto, Long ownerId) {
+    // Метод для преобразования DTO в Entity. Принимает готовую сущность User.
+    public static Item toItem(ItemDto itemDto, User owner) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
-                checker.findUserById(ownerId),
-                itemDto.getRequestId() != null ? itemDto.getRequestId() : null
+                owner, // Используем переданного владельца
+                itemDto.getRequestId()
         );
     }
 
-    public CommentDto toCommentDto(Comment comment) {
+    public static CommentDto toCommentDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
                 comment.getItem(),
-                comment.getAuthor().getName(),
-                comment.getCreated());
+                comment.getAuthor().getName(), // Берем имя напрямую из сущности
+                comment.getCreated()
+        );
     }
 }

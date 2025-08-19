@@ -1,72 +1,50 @@
 package ru.practicum.shareit.booking.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInputDto;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.service.ItemServiceImpl;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
-/*
- * Преобразование сущностей в DTO объекты
- * */
-
-@Component
 public class BookingMapper {
-    private UserServiceImpl userService;
-    private ItemServiceImpl itemService;
-    private UserMapper userMapper;
-    private ItemMapper itemMapper;
 
-    @Autowired
-    public BookingMapper(UserServiceImpl userService, ItemServiceImpl itemService,
-                         UserMapper userMapper, ItemMapper itemMapper) {
-        this.userService = userService;
-        this.itemService = itemService;
-        this.userMapper = userMapper;
-        this.itemMapper = itemMapper;
-    }
-
-    public BookingDto toBookingDto(Booking booking) {
-        if (booking != null) {
-            return new BookingDto(
-                    booking.getId(),
-                    booking.getStart(),
-                    booking.getEnd(),
-                    itemMapper.toItemDto(booking.getItem()),
-                    userMapper.toUserDto(booking.getBooker()),
-                    booking.getStatus()
-            );
-        } else {
+    public static BookingDto toBookingDto(Booking booking, ItemDto itemDto, UserDto bookerDto) {
+        if (booking == null) {
             return null;
         }
+        return new BookingDto(
+                booking.getId(),
+                booking.getStart(),
+                booking.getEnd(),
+                itemDto,
+                bookerDto,
+                booking.getStatus()
+        );
     }
 
-    public BookingShortDto toBookingShortDto(Booking booking) {
-        if (booking != null) {
-            return new BookingShortDto(
-                    booking.getId(),
-                    booking.getBooker().getId(),
-                    booking.getStart(),
-                    booking.getEnd()
-            );
-        } else {
+    public static BookingShortDto toBookingShortDto(Booking booking) {
+        if (booking == null) {
             return null;
         }
+        return new BookingShortDto(
+                booking.getId(),
+                booking.getBooker().getId(),
+                booking.getStart(),
+                booking.getEnd()
+        );
     }
 
-    public Booking toBooking(BookingInputDto bookingInputDto, Long bookerId) {
+    public static Booking toBooking(BookingInputDto bookingInputDto, Item item, User booker) {
         return new Booking(
                 null,
                 bookingInputDto.getStart(),
                 bookingInputDto.getEnd(),
-                itemService.findItemById(bookingInputDto.getItemId()),
-                userService.findUserById(bookerId),
+                item,
+                booker,
                 Status.WAITING
         );
     }

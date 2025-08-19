@@ -1,6 +1,7 @@
 package ru.practicum.shareit.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -28,7 +29,7 @@ public class CheckConsistencyService {
 
     @Autowired
     public CheckConsistencyService(UserServiceImpl userService, ItemServiceImpl itemService,
-                                   BookingService bookingService) {
+                                   @Lazy BookingService bookingService) {
         this.userService = userService;
         this.itemService = itemService;
         this.bookingService = bookingService;
