@@ -7,10 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.exception.ItemNotFoundException;
+import ru.practicum.shareit.booking.exception.ValidationException;
 import ru.practicum.shareit.booking.interfaces.BookingService;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.exception.ItemNotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -19,6 +18,7 @@ import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.model.Booking;
 import ru.practicum.shareit.service.CheckConsistencyService;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.model.User;
@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -191,4 +192,23 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemMapper::toCommentDto)
                 .collect(toList());
     }
+
+    @Override
+    public List<ItemDto> getItemsByRequestId(Long requestId) {
+        // Получаем список элементов по requestId
+        List<Item> items = repository.findAllByRequestId(requestId,
+                Sort.by(Sort.Direction.DESC, "id"));
+
+        // Для каждого элемента получаем комментарии и мапим в DTO
+        return items.stream()
+                .map(item -> {
+                    // Получаем комментарии для текущего элемента
+                    List<CommentDto> comments = commentRepository.findByItemId(item.getId()).stream()
+                            .map(ItemMapper::toCommentDto)
+                            .toList();
+                    return ItemMapper.toItemDto(item, comments);
+                })
+                .collect(Collectors.toList());
+    }
+
 }
