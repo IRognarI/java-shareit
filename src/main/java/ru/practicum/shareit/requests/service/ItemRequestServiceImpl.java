@@ -6,13 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.checker.CheckConsistencyService;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.interfaces.ItemRequestService;
 import ru.practicum.shareit.requests.mapper.ItemRequestMapper;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
-import ru.practicum.shareit.service.CheckConsistencyService;
 import ru.practicum.shareit.util.Pagination;
 
 import java.time.LocalDateTime;

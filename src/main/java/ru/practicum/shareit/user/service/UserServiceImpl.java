@@ -2,8 +2,8 @@ package ru.practicum.shareit.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.exception.UserAlreadyExistsException;
-import ru.practicum.shareit.booking.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.UserAlreadyExistsException;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
