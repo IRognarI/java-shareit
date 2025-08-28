@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.checker.CheckConsistencyService;
 import ru.practicum.shareit.exception.UserAlreadyExistsException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -26,13 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserServiceTest {
     private final UserService userService;
-    private final UserMapper mapper;
-    private final CheckConsistencyService checker;
     private User user = new User(1L, "User", "first@first.ru");
 
     @Test
     void shouldReturnUserWhenGetUserById() {
-        UserDto returnUserDto = userService.create(mapper.toUserDto(user));
+        UserDto returnUserDto = userService.create(UserMapper.toUserDto(user));
         assertThat(returnUserDto.getName(), equalTo(user.getName()));
         assertThat(returnUserDto.getEmail(), equalTo(user.getEmail()));
     }
@@ -46,7 +43,7 @@ public class UserServiceTest {
     @Test
     void shouldDeleteUser() {
         User user = new User(10L, "Ten", "ten@ten.ru");
-        UserDto returnUserDto = userService.create(mapper.toUserDto(user));
+        UserDto returnUserDto = userService.create(UserMapper.toUserDto(user));
         List<UserDto> listUser = userService.getUsers();
         int size = listUser.size();
         userService.delete(returnUserDto.getId());
@@ -56,7 +53,7 @@ public class UserServiceTest {
 
     @Test
     void shouldUpdateUser() {
-        UserDto returnUserDto = userService.create(mapper.toUserDto(user));
+        UserDto returnUserDto = userService.create(UserMapper.toUserDto(user));
         returnUserDto.setName("NewName");
         returnUserDto.setEmail("new@email.ru");
         userService.update(returnUserDto, returnUserDto.getId());
@@ -67,16 +64,16 @@ public class UserServiceTest {
 
     @Test
     void shouldExceptionWhenUpdateUserWithExistEmail() {
-        UserDto userDto = mapper.toUserDto(user);
-        UserDto finishUserDto = userService.create(userDto);
+        UserDto userDto1 = UserMapper.toUserDto(user);
+        UserDto savedUser1 = userService.create(userDto1);
 
-        User user = new User(4L, "Vasya", "jdfgidfjg@mail.ru");
-        UserDto userDto2 = mapper.toUserDto(user);
-        UserDto userDtoTarget = userService.create(userDto2);
+        User user2 = new User(2L, "Vasya", "vasya@mail.ru");
+        UserDto userDto2 = UserMapper.toUserDto(user2);
+        UserDto savedUser2 = userService.create(userDto2);
 
-        userDtoTarget.setEmail(finishUserDto.getEmail());
+        savedUser2.setEmail(savedUser1.getEmail());
 
         Assertions.assertThrows(UserAlreadyExistsException.class,
-                () -> userService.update(userDtoTarget, userDtoTarget.getId()));
+                () -> userService.update(savedUser2, savedUser2.getId()));
     }
 }

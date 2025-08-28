@@ -32,12 +32,11 @@ public class UserServiceImplTest {
     @Mock
     private UserRepository mockUserRepository;
     private UserService userService;
-    private UserMapper mapper = new UserMapper();
     private UserDto userDto = new UserDto(1L, "Alex", "alex@alex.ru");
 
     @BeforeEach
     void beforeEach() {
-        userService = new UserServiceImpl(mockUserRepository, mapper);
+        userService = new UserServiceImpl(mockUserRepository);
     }
 
     @Test
@@ -67,7 +66,7 @@ public class UserServiceImplTest {
     @Test
     void shouldReturnUserWhenFindUserById() {
         when(mockUserRepository.findById(any(Long.class)))
-                .thenReturn(Optional.of(mapper.toUser(userDto)));
+                .thenReturn(Optional.of(UserMapper.toUser(userDto)));
         User user = userService.findUserById(1L);
         verify(mockUserRepository, Mockito.times(1))
                 .findById(1L);

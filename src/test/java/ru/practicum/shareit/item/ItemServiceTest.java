@@ -134,11 +134,10 @@ public class ItemServiceTest {
 
     @Test
     void shouldExceptionWhenCreateCommentWhenUserNotBooker() {
-        UserMapper userMapper = new UserMapper();
         UserDto ownerDto = userService.create(userDto1);
         UserDto newUserDto = userService.create(userDto2);
         ItemDto newItemDto = itemService.create(itemDto, ownerDto.getId());
-        CommentDto commentDto = new CommentDto(1L, "Comment1", ItemMapper.toItem(itemDto, userMapper.toUser(ownerDto)),
+        CommentDto commentDto = new CommentDto(1L, "Comment1", ItemMapper.toItem(itemDto, UserMapper.toUser(ownerDto)),
                 newUserDto.getName(), LocalDateTime.now());
         ValidationException exp = assertThrows(ValidationException.class,
                 () -> itemService.createComment(commentDto, itemDto.getId(), newUserDto.getId()));
@@ -147,7 +146,6 @@ public class ItemServiceTest {
 
     @Test
     void shouldCreateComment() {
-        UserMapper userMapper = new UserMapper();
         UserDto ownerDto = userService.create(userDto1);
         UserDto newUserDto = userService.create(userDto2);
         ItemDto newItemDto = itemService.create(itemDto, ownerDto.getId());
@@ -165,7 +163,7 @@ public class ItemServiceTest {
         }
 
         CommentDto commentDto = new CommentDto(1L, "Comment1",
-                ItemMapper.toItem(itemDto, userMapper.toUser(ownerDto)),
+                ItemMapper.toItem(itemDto, UserMapper.toUser(ownerDto)),
                 newUserDto.getName(), LocalDateTime.now());
         itemService.createComment(commentDto, newItemDto.getId(), newUserDto.getId());
         Assertions.assertEquals(1, itemService.getCommentsByItemId(newItemDto.getId()).size());
