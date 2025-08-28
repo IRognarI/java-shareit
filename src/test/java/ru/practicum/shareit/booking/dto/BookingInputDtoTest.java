@@ -57,7 +57,7 @@ public class BookingInputDtoTest {
 
         Set<ConstraintViolation<BookingInputDto>> violations = validator.validate(bookingInputDto);
 
-        // Проверяем только наличие нарушения для поля itemId
+
         assertThat(violations).isNotEmpty();
         assertThat(violations.iterator().next().getPropertyPath().toString()).isEqualTo("itemId");
     }

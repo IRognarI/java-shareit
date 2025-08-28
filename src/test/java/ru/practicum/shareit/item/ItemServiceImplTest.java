@@ -6,14 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.booking.exception.ItemNotFoundException;
 import ru.practicum.shareit.booking.interfaces.BookingService;
+import ru.practicum.shareit.checker.CheckConsistencyService;
+import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
-import ru.practicum.shareit.service.CheckConsistencyService;
 import ru.practicum.shareit.user.interfaces.UserService;
 
 import java.util.Optional;

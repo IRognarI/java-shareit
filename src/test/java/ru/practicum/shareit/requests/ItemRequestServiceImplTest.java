@@ -7,13 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.booking.exception.ItemRequestNotFoundException;
+import ru.practicum.shareit.checker.CheckConsistencyService;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.interfaces.ItemRequestService;
 import ru.practicum.shareit.requests.mapper.ItemRequestMapper;
 import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.requests.service.ItemRequestServiceImpl;
-import ru.practicum.shareit.service.CheckConsistencyService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;

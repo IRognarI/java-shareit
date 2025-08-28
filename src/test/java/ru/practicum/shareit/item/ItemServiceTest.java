@@ -8,9 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingInputDto;
-import ru.practicum.shareit.booking.exception.ItemNotFoundException;
-import ru.practicum.shareit.booking.exception.ValidationException;
 import ru.practicum.shareit.booking.interfaces.BookingService;
+import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
@@ -163,7 +163,7 @@ public class ItemServiceTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        // Используем статический метод ItemMapper
+
         CommentDto commentDto = new CommentDto(1L, "Comment1",
                 ItemMapper.toItem(itemDto, userMapper.toUser(ownerDto)),
                 newUserDto.getName(), LocalDateTime.now());

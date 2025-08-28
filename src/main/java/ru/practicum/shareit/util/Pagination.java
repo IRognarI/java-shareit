@@ -1,7 +1,7 @@
 package ru.practicum.shareit.util;
 
 import lombok.Getter;
-import ru.practicum.shareit.booking.exception.ValidationException;
+import ru.practicum.shareit.exception.ValidationException;
 
 @Getter
 public class Pagination {

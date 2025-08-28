@@ -28,12 +28,12 @@ import java.util.Objects;
 public class ItemRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                  // уникальный идентификатор запроса
-    private String description;       // текст запроса, содержащий описание требуемой вещи
+    private Long id;
+    private String description;
     @ManyToOne()
     @JoinColumn(name = "requestor_id", referencedColumnName = "id")
-    private User requestor;           // пользователь, создавший запрос
-    private LocalDateTime created;    // дата и время создания запроса
+    private User requestor;
+    private LocalDateTime created;
 
     @Override
     public final boolean equals(Object o) {

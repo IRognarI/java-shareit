@@ -7,12 +7,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.exception.BookingNotFoundException;
 import ru.practicum.shareit.booking.interfaces.BookingService;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.service.BookingServiceImpl;
+import ru.practicum.shareit.checker.CheckConsistencyService;
+import ru.practicum.shareit.exception.BookingNotFoundException;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.repository.BookingRepository;
-import ru.practicum.shareit.service.BookingServiceImpl;
-import ru.practicum.shareit.service.CheckConsistencyService;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
