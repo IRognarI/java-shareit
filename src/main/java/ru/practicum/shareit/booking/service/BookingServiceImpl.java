@@ -38,19 +38,16 @@ public class BookingServiceImpl implements BookingService {
     private final CheckConsistencyService checker;
     private final ItemService itemService;
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @Autowired
     public BookingServiceImpl(BookingRepository bookingRepository,
                               CheckConsistencyService checkConsistencyService,
                               ItemService itemService,
-                              UserService userService,
-                              UserMapper userMapper) {
+                              UserService userService) {
         this.repository = bookingRepository;
         this.checker = checkConsistencyService;
         this.itemService = itemService;
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @Override
@@ -76,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
 
 
         ItemDto itemDto = itemService.getItemById(item.getId(), bookerId);
-        UserDto bookerDto = userMapper.toUserDto(booker);
+        UserDto bookerDto = UserMapper.toUserDto(booker);
 
         return BookingMapper.toBookingDto(savedBooking, itemDto, bookerDto);
     }
@@ -107,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
 
 
         ItemDto itemDto = itemService.getItemById(updatedBooking.getItem().getId(), userId);
-        UserDto bookerDto = userMapper.toUserDto(updatedBooking.getBooker());
+        UserDto bookerDto = UserMapper.toUserDto(updatedBooking.getBooker());
 
         return BookingMapper.toBookingDto(updatedBooking, itemDto, bookerDto);
     }
@@ -122,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getBooker().getId().equals(userId) || checker.isItemOwner(booking.getItem().getId(), userId)) {
 
             ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
-            UserDto bookerDto = userMapper.toUserDto(booking.getBooker());
+            UserDto bookerDto = UserMapper.toUserDto(booking.getBooker());
 
             return BookingMapper.toBookingDto(booking, itemDto, bookerDto);
         } else {
@@ -170,7 +167,7 @@ public class BookingServiceImpl implements BookingService {
         return bookings.stream()
                 .map(booking -> {
                     ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
-                    UserDto bookerDto = userMapper.toUserDto(booking.getBooker());
+                    UserDto bookerDto = UserMapper.toUserDto(booking.getBooker());
                     return BookingMapper.toBookingDto(booking, itemDto, bookerDto);
                 })
                 .collect(Collectors.toList());
@@ -212,7 +209,7 @@ public class BookingServiceImpl implements BookingService {
         return bookings.stream()
                 .map(booking -> {
                     ItemDto itemDto = itemService.getItemById(booking.getItem().getId(), userId);
-                    UserDto bookerDto = userMapper.toUserDto(booking.getBooker());
+                    UserDto bookerDto = UserMapper.toUserDto(booking.getBooker());
                     return BookingMapper.toBookingDto(booking, itemDto, bookerDto);
                 })
                 .collect(Collectors.toList());

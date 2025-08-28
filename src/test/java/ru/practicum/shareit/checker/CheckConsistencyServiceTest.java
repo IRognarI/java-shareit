@@ -33,35 +33,34 @@ public class CheckConsistencyServiceTest {
     private final UserService userService;
     private final ItemService itemService;
     private final BookingService bookingService;
-    private final UserMapper userMapper;
     private User user = new User(1L, "User", "first@first.ru");
     private User user2 = new User(2L, "Second", "second@second.ru");
     private Item item = new Item(1L, "Item1", "Description1", true, user, null);
 
     @Test
     void shouldReturnTrueWhenExistUser() {
-        UserDto newUserDto = userService.create(userMapper.toUserDto(user));
+        UserDto newUserDto = userService.create(UserMapper.toUserDto(user));
         assertTrue(checker.isExistUser(newUserDto.getId()));
     }
 
     @Test
     void shouldReturnTrueWhenItemAvailable() {
-        UserDto newUserDto = userService.create(userMapper.toUserDto(user));
+        UserDto newUserDto = userService.create(UserMapper.toUserDto(user));
         ItemDto newItemDto = itemService.create(ItemMapper.toItemDto(item, List.of()), newUserDto.getId());
         assertTrue(checker.isAvailableItem(newItemDto.getId()));
     }
 
     @Test
     void shouldReturnTrueWhenIsItemOwner() {
-        UserDto newUserDto = userService.create(userMapper.toUserDto(user));
+        UserDto newUserDto = userService.create(UserMapper.toUserDto(user));
         ItemDto newItemDto = itemService.create(ItemMapper.toItemDto(item, List.of()), newUserDto.getId());
         assertTrue(checker.isItemOwner(newItemDto.getId(), newUserDto.getId()));
     }
 
     @Test
     void shouldReturnBookingWithUserBookedItem() {
-        UserDto firstUserDto = userService.create(userMapper.toUserDto(user));
-        UserDto secondUserDto = userService.create(userMapper.toUserDto(user2));
+        UserDto firstUserDto = userService.create(UserMapper.toUserDto(user));
+        UserDto secondUserDto = userService.create(UserMapper.toUserDto(user2));
         ItemDto newItemDto = itemService.create(ItemMapper.toItemDto(item, List.of()), firstUserDto.getId());
         BookingInputDto bookingInputDto = new BookingInputDto(
                 newItemDto.getId(),

@@ -14,7 +14,6 @@ import ru.practicum.shareit.checker.CheckConsistencyService;
 import ru.practicum.shareit.exception.BookingNotFoundException;
 import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.user.interfaces.UserService;
-import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Optional;
 
@@ -38,12 +37,9 @@ public class BookingServiceImplTest {
     @Mock
     private UserService userService;
 
-    @Mock
-    private UserMapper userMapper;
-
     @Test
     void shouldExceptionWhenGetBookingWithWrongId() {
-        BookingService bookingService = new BookingServiceImpl(repository, checker, itemService, userService, userMapper);
+        BookingService bookingService = new BookingServiceImpl(repository, checker, itemService, userService);
         when(checker.isExistUser(any(Long.class)))
                 .thenReturn(true);
         when(repository.findById(any(Long.class)))
