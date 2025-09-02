@@ -1,18 +1,21 @@
 package ru.practicum.shareit.user.dto;
 
 import jakarta.validation.constraints.Email;
-import lombok.AccessLevel;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
+
+/**
+ * DTO объект передающейся "наружу"
+ */
 
 @Data
-@Builder(toBuilder = true)
-@Setter(AccessLevel.NONE)
+@AllArgsConstructor
 public class UserDto {
     private Long id;
-
-    @Email(message = "Укажите корректный email адрес")
-    private String email;
+    @NotBlank
     private String name;
+    @Email
+    @NotBlank
+    private String email;
 }

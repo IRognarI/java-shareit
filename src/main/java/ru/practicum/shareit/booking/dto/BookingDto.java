@@ -1,36 +1,28 @@
 package ru.practicum.shareit.booking.dto;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.enums.Status;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.user.dto.UserDto;
+
+import java.time.LocalDateTime;
 
 /**
- * TODO Sprint add-bookings.
+ * DTO объект
+ * Используется для передачи информации об объекте Booking "наружу"
+ * Несет в себе информацию об id бронирования, дате начала брони и об
+ * ее окончании, владельце вещи которую арендуют, о самом арендаторе
+ * и об статусе брони
  */
+
 @Data
-@EqualsAndHashCode(of = {"id"})
-@Builder(toBuilder = true)
+@AllArgsConstructor
 public class BookingDto {
     private Long id;
-    private LocalDateTime bookingStart;
-    private LocalDateTime bookingEnd;
-    private Long itemId;
-
-    @Builder.Default
-    private Set<Long> booker = new HashSet<>();
-
-    public static BookingDto bookingToDto(Booking booking) {
-
-        return BookingDto.builder()
-                .id(booking.getId())
-                .bookingStart(booking.getBookingStart())
-                .bookingEnd(booking.getBookingEnd())
-                .itemId(booking.getItemId())
-                .booker(Set.copyOf(booking.getBooker()))
-                .build();
-    }
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private ItemDto item;
+    private UserDto booker;
+    private Status status;
 }
